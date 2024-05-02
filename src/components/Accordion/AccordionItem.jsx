@@ -1,7 +1,6 @@
 import { createContext, useContext } from "react";
 
 const AccordionItemContext = createContext();
-//AccordionItem에 감싸있지 않으면 사용할 수 없음
 
 export function useAccordionItemContext() {
   const ctx = useContext(AccordionItemContext);
