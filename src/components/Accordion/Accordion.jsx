@@ -1,35 +1,42 @@
-//wrapper
+import { createContext, useContext, useState } from "react";
 
-import { useState } from "react";
-import { createContext, useContext } from "react";
+import AccordionItem from "./AccordionItem.jsx";
+import AccordionTitle from "./AccordionTitle.jsx";
+import AccordionContent from "./AccordionContent.jsx";
 
-const AccordionContext = createContext;
+const AccordionContext = createContext();
 
 export function useAccordionContext() {
-  const cxt = useContext(AccordionContext);
+  const ctx = useContext(AccordionContext);
+
   if (!ctx) {
-    throw new Error("error/ Accordion wrppaed by Accordion");
+    throw new Error(
+      "Accordion-related components must be wrapped by <Accordion>."
+    );
   }
+
   return ctx;
 }
 
 export default function Accordion({ children, className }) {
   const [openItemId, setOpenItemId] = useState();
-  function openItem(id) {
-    setOpenItemId(id);
+
+  function toggleItem(id) {
+    setOpenItemId((prevId) => (prevId === id ? null : id));
   }
 
-  function closeItem() {
-    setOpenItemId(null);
-  }
   const contextValue = {
     openItemId,
-    openItem,
-    closeItem,
+    toggleItem,
   };
+
   return (
     <AccordionContext.Provider value={contextValue}>
       <ul className={className}>{children}</ul>
     </AccordionContext.Provider>
   );
 }
+
+Accordion.Item = AccordionItem;
+Accordion.Title = AccordionTitle;
+Accordion.Content = AccordionContent;
